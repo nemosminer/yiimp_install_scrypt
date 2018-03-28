@@ -174,7 +174,7 @@ sudo sed -i 's/password = tu8tu5/password = '$blckntifypass'/g' *.conf
 sudo sed -i 's/server = yaamp.com/server = '$server_name'/g' *.conf
 sudo sed -i 's/host = yaampdb/host = '$MYSQLIP'/g' *.conf
 sudo sed -i 's/database = yaamp/database = '$MYSQLDB'/g' *.conf
-sudo sed -i 's/username = root/username = 'MYSQLUSER'/g' *.conf
+sudo sed -i 's/username = root/username = '$MYSQLUSER'/g' *.conf
 sudo sed -i 's/password = patofpaq/password = '$MYSQLPASS'/g' *.conf
 cd ~
 
