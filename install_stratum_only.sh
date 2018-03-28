@@ -28,7 +28,7 @@ displayErr() {
     output " "
     read -e -p "Enter time zone (e.g. America/New_York) : " TIME
     read -e -p "Enter your block notify password  (required) : " blckntifypass
-    read -e -p "Server name (no http:// or www. just example.com) : " server_name
+    read -e -p "Server name (no http:// just stratum-us.example.com) : " server_name
     read -e -p "Set stratum to AutoExchange? i.e. mine any coinf with BTC address? [y/N] : " BTC
     read -e -p "Enter the sql server ip address : " MYSQLIP
     read -e -p "Enter the sql server database : " MYSQLDB
