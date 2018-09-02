@@ -1,15 +1,15 @@
 #!/bin/bash
-################################################################################
-# Original Author:   crombiecrunch
-# Fork Author: manfromafar
-# Current Author: Xavatar
-# Web:     
-#
-# Program:
-#   Install yiimp on Ubuntu 16.04 running Nginx, MariaDB, and php7.0.x
-# 
-# 
-################################################################################
+##########################################################################
+#                                                                        #
+# Original Author: Crombiecrunch                                         #
+# 1st Fork Author: Manfromafar                                           #
+# 2nd Fork Author: Tatar Xavatar                                         #
+# Current Author:  Natizyskunk                                           #
+#                                                                        #
+# Program:                                                               #
+#   Install yiimp on Ubuntu 16.04 running Nginx, MariaDB, and php7.0.x   #
+#                                                                        #
+##########################################################################
 output() {
     printf "\E[0;33;40m"
     echo $1
@@ -44,9 +44,10 @@ displayErr() {
     output " "
     sleep 3
         
-    sudo apt-get -y update 
-    sudo apt-get -y upgrade
-    sudo apt-get -y autoremove
+    sudo apt -y update 
+    sudo apt -y upgrade
+	sudo apt -y dist-upgrade
+    sudo apt -y autoremove
     
     
     # Switch Aptitude
@@ -55,7 +56,7 @@ displayErr() {
     output " "
     sleep 3
     
-    sudo apt-get -y install aptitude
+    sudo apt -y install aptitude
     
     
     # Installing Nginx
@@ -143,8 +144,8 @@ default         0;
     sudo aptitude -y install libcanberra-gtk-module libqrencode-dev libzmq3-dev
     sudo aptitude -y install libqt5gui5 libqt5core5a libqt5webkit5-dev libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev protobuf-compiler
     sudo add-apt-repository -y ppa:bitcoin/bitcoin
-    sudo apt-get -y update
-    sudo apt-get install -y libdb4.8-dev libdb4.8++-dev libdb5.3 libdb5.3++
+    sudo apt -y update
+    sudo apt install -y libdb4.8-dev libdb4.8++-dev libdb5.3 libdb5.3++
        
     
     # Generating Random Passwords
@@ -187,7 +188,7 @@ default         0;
     sudo aptitude -y install fail2ban
     fi
     if [[ ("$UFW" == "y" || "$UFW" == "Y" || "$UFW" == "") ]]; then
-    sudo apt-get install ufw
+    sudo apt install ufw
     sudo ufw default deny incoming
     sudo ufw default allow outgoing
     sudo ufw allow ssh
@@ -278,7 +279,7 @@ default         0;
     # Generating Random Password for stratum
     blckntifypass=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1`
     cd ~
-    git clone https://github.com/tpruvot/yiimp.git
+    git clone https://github.com/Natizyskunk/yiimp.git
     cd $HOME/yiimp/blocknotify
     sudo sed -i 's/tu8tu5/'$blckntifypass'/' blocknotify.cpp
     sudo make
@@ -897,7 +898,7 @@ define('"'"'YIIMP_PUBLIC_EXPLORER'"'"', true);
 define('"'"'YIIMP_PUBLIC_BENCHMARK'"'"', true);
 define('"'"'YIIMP_FIAT_ALTERNATIVE'"'"', '"'"'USD'"'"'); // USD is main
 define('"'"'YAAMP_USE_NICEHASH_API'"'"', false);
-define('"'"'YAAMP_BTCADDRESS'"'"', '"'"'1C1hnjk3WhuAvUN6Ny6LTxPD3rwSZwapW7'"'"');
+define('"'"'YAAMP_BTCADDRESS'"'"', '"'"'<BTCaddress>'"'"');
 define('"'"'YAAMP_SITE_URL'"'"', '"'"''"${server_name}"''"'"');
 define('"'"'YAAMP_STRATUM_URL'"'"', YAAMP_SITE_URL); // change if your stratum server is on a different host
 define('"'"'YAAMP_SITE_NAME'"'"', '"'"'YIIMP'"'"');
@@ -926,17 +927,17 @@ define('"'"'EXCH_NOVA_KEY'"'"', '"'"''"'"');
 // Automatic withdraw to Yaamp btc wallet if btc balance > 0.3
 define('"'"'EXCH_AUTO_WITHDRAW'"'"', 0.3);
 // nicehash keys deposit account & amount to deposit at a time
-define('"'"'NICEHASH_API_KEY'"'"','"'"'f96c65a7-3d2f-4f3a-815c-cacf00674396'"'"');
-define('"'"'NICEHASH_API_ID'"'"','"'"'825979'"'"');
-define('"'"'NICEHASH_DEPOSIT'"'"','"'"'3ABoqBjeorjzbyHmGMppM62YLssUgJhtuf'"'"');
+define('"'"'NICEHASH_API_KEY'"'"','"'"'<api-key>'"'"');
+define('"'"'NICEHASH_API_ID'"'"','"'"'<api-id>'"'"');
+define('"'"'NICEHASH_DEPOSIT'"'"','"'"'<nicehash-btc-deposit-address>'"'"');
 define('"'"'NICEHASH_DEPOSIT_AMOUNT'"'"','"'"'0.01'"'"');
 $cold_wallet_table = array(
-	'"'"'1PqjApUdjwU9k4v1RDWf6XveARyEXaiGUz'"'"' => 0.10,
+	'"'"'<cold-wallet-btc-address>'"'"' => 0.10,
 );
 // Sample fixed pool fees
 $configFixedPoolFees = array(
         '"'"'zr5'"'"' => 2.0,
-        '"'"'scrypt'"'"' => 20.0,
+        '"'"'scrypt'"'"' => 10.0,
         '"'"'sha256'"'"' => 5.0,
 );
 // Sample custom stratum ports
@@ -993,16 +994,25 @@ $configAlgoNormCoef = array(
     sudo systemctl restart nginx.service
 
 
-    output " "
-    output " "
-    output " "
-    output " "
-    output "Whew that was fun, just some reminders. Your mysql information is saved in ~/.my.cnf. this installer did not directly install anything required to build coins."
-    output " "
-    output "Please make sure to change your wallet addresses in the /var/web/serverconfig.php file."
-    output " "
-    output "Please make sure to add your public and private keys."
-    output " "
-    output "TUTO Youtube : https://www.youtube.com/watch?v=vdBCw6_cyig"
-    output " "
-    output " "
+
+	output " "
+	output " "
+	output " "
+	output " "
+	output "Whew that was fun, just some reminders. Your mysql information is saved in ~/.my.cnf. this installer did not directly install anything required to build coins."
+	output " "
+	output "Please make sure to change your wallet addresses in the /var/web/serverconfig.php file."
+	output " "
+	output "Please make sure to add your public and private keys."
+	output " "
+	output " "
+	output "Youtube Tutorials:"
+	output "Tatar Xavatar - Ubuntu 16.04 Installation (without SSL) : https://www.youtube.com/watch?v=vdBCw6_cyig"
+	output "Tatar Xavatar - Ubuntu 16.04 Installation (with SSL) : https://www.youtube.com/watch?v=fWwGow_i-Vw"
+	output "Tatar Xavatar - Coin Installation (Compil + Stratum + Mining) : https://www.youtube.com/watch?v=__C4mDA4SEc"
+	output "SwedPool - Dedicated custom ports (stratum) : https://www.youtube.com/watch?v=-7uGOi1Xh68"
+	output " "
+	output "GermanKryptoGuru - Yiimp Tutorials : https://www.youtube.com/watch?v=qbeuvcHT_Ak&list=PLoTs2BqI9G6C3qiYq_uzPWlQl9VI9UdEx"
+	output "GermanKryptoGuru - Yiimp Tutorials 2018 : https://www.youtube.com/watch?v=fvuXQuvH2RQ&list=PLoTs2BqI9G6CMNKAzFFnL3AtyxWK5sDQN"
+	output " "
+	output " "
