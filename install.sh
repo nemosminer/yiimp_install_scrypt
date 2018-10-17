@@ -1,15 +1,15 @@
 #!/bin/bash
-##########################################################################
-#                                                                        #
-# Original Author: Crombiecrunch                                         #
-# 1st Fork Author: Manfromafar                                           #
-# 2nd Fork Author: Tatar Xavatar                                         #
-# Current Author:  Natizyskunk                                           #
-#                                                                        #
-# Program:                                                               #
-#   Install yiimp on Ubuntu 16.04 running Nginx, MariaDB, and php7.0.x   #
-#                                                                        #
-##########################################################################
+################################################################################
+#                                                                              #
+# Original Author: Crombiecrunch                                               #
+# 1st Fork Author: Manfromafar                                                 #
+# 2nd Fork Author: Xavatar  (https://github.com/xavatar/yiimp_install_scrypt)  #
+# Current Author:  Natizyskunk                                                 #
+#                                                                              #
+# Program:                                                                     #
+#   Install yiimp on Ubuntu 16.04 running Nginx, MariaDB, and php7.0.x         #
+#                                                                              #
+################################################################################
 output() {
     printf "\E[0;33;40m"
     echo $1
@@ -191,9 +191,14 @@ default         0;
     sudo apt install ufw
     sudo ufw default deny incoming
     sudo ufw default allow outgoing
+    sudo ufw allow ftp
     sudo ufw allow ssh
     sudo ufw allow http
     sudo ufw allow https
+    sudo ufw allow 21/tcp
+    sudo ufw allow 22/tcp
+    sudo ufw allow 80/tcp
+    sudo ufw allow 443/tcp
     sudo ufw allow 3333/tcp
     sudo ufw allow 3339/tcp
     sudo ufw allow 3334/tcp
@@ -278,19 +283,27 @@ default         0;
     
     # Generating Random Password for stratum
     blckntifypass=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1`
+    
+    # Compil Blocknotify
     cd ~
     git clone https://github.com/Natizyskunk/yiimp.git
     cd $HOME/yiimp/blocknotify
     sudo sed -i 's/tu8tu5/'$blckntifypass'/' blocknotify.cpp
     sudo make
+    
+    # Compil iniparser
     cd $HOME/yiimp/stratum/iniparser
     sudo make
+    
+    # Compil Stratum
     cd $HOME/yiimp/stratum
     if [[ ("$BTC" == "y" || "$BTC" == "Y") ]]; then
     sudo sed -i 's/CFLAGS += -DNO_EXCHANGE/#CFLAGS += -DNO_EXCHANGE/' $HOME/yiimp/stratum/Makefile
     sudo make
     fi
     sudo make
+    
+    # Copy Files (Blocknotify,iniparser,Stratum)
     cd $HOME/yiimp
     sudo sed -i 's/AdminRights/'$admin_panel'/' $HOME/yiimp/web/yaamp/modules/site/SiteController.php
     sudo cp -r $HOME/yiimp/web /var/
